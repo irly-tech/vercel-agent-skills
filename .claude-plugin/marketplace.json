@@ -1,0 +1,56 @@
+{
+  "name": "vercel-agent-skills",
+  "owner": {
+    "name": "irly-tech"
+  },
+  "metadata": {
+    "description": "Irly's mirror of Vercel's agent skills, exposed as Claude Code plugins.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "react-best-practices",
+      "source": "./skills/react-best-practices",
+      "description": "React and Next.js performance optimization guidelines from Vercel Engineering. Use when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns.",
+      "version": "1.0.0",
+      "author": { "name": "Vercel Engineering" },
+      "license": "MIT",
+      "keywords": ["react", "nextjs", "performance", "optimization"],
+      "category": "productivity",
+      "strict": false
+    },
+    {
+      "name": "react-native-skills",
+      "source": "./skills/react-native-skills",
+      "description": "React Native and Expo best practices for building performant mobile apps. Use when building React Native components, optimizing list performance, implementing animations, or working with native modules.",
+      "version": "1.0.0",
+      "author": { "name": "Vercel" },
+      "license": "MIT",
+      "keywords": ["react-native", "expo", "mobile", "performance"],
+      "category": "productivity",
+      "strict": false
+    },
+    {
+      "name": "composition-patterns",
+      "source": "./skills/composition-patterns",
+      "description": "React composition patterns that scale. Use when refactoring components with boolean prop proliferation, building flexible component libraries, or designing reusable APIs.",
+      "version": "1.0.0",
+      "author": { "name": "Vercel" },
+      "license": "MIT",
+      "keywords": ["react", "composition", "patterns", "architecture"],
+      "category": "productivity",
+      "strict": false
+    },
+    {
+      "name": "vercel-cli-with-tokens",
+      "source": "./skills/vercel-cli-with-tokens",
+      "description": "Deploy and manage projects on Vercel using token-based authentication. Use when working with Vercel CLI using access tokens rather than interactive login.",
+      "version": "1.0.0",
+      "author": { "name": "Vercel" },
+      "license": "MIT",
+      "keywords": ["vercel", "deploy", "cli", "ci"],
+      "category": "deployment",
+      "strict": false
+    }
+  ]
+}

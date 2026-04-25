@@ -1,0 +1,62 @@
+name: Sync from upstream
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/vercel-labs/agent-skills.git
+          git fetch upstream main
+
+      - name: Attempt fast-forward merge
+        id: ff
+        continue-on-error: true
+        run: |
+          git checkout main
+          git merge --ff-only upstream/main
+
+      - name: Push if fast-forwarded
+        if: steps.ff.outcome == 'success'
+        run: |
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            git push origin main
+            echo "Fast-forwarded main with upstream changes."
+          else
+            echo "Already up to date."
+          fi
+
+      - name: Open PR if fast-forward failed
+        if: steps.ff.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="sync/upstream-$(date +%Y%m%d-%H%M%S)"
+          git checkout -B "$BRANCH" upstream/main
+          git push -f origin "$BRANCH"
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "Sync from vercel-labs/agent-skills" \
+            --body "Fast-forward merge from upstream failed (likely because of local commits such as the marketplace manifest). Review and merge manually." \
+            || echo "PR may already exist for this branch."
